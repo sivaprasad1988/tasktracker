@@ -10,6 +10,9 @@ A brief description of each package and the function it will serve for React
 * redux: used to manage state between components (can be used with React or any other view library)
 * redux-thunk: middleware for Redux that allows us to directly access the dispatch method to make asynchronous calls from our actions
 
+
+#npm i bcryptjs body-parser concurrently express is-empty jsonwebtoken mongoose passport passport-jwt validator
+
 #Use npm start to run react 
 
 
