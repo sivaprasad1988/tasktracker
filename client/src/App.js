@@ -13,7 +13,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
-import TrelloIntegration from './components/TrelloIntegration/TrelloIntegration';
+import TrelloLogin from './components/auth/TrelloLogin';
 import "./App.css";
 
 // Check for token to keep user logged in
@@ -47,7 +47,8 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                <PrivateRoute exact path="/trello-integration" component={TrelloIntegration} />
+                <PrivateRoute exact path="/trello-integration" component={TrelloLogin} />
+                <PrivateRoute exact path="/callback" component={TrelloLogin} />
             </Switch>
           </div>
         </Router>
