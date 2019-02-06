@@ -20,7 +20,9 @@
     "oauth": "^0.9.15",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "semantic-ui-react": "^0.84.0",
     "trello": "^0.9.1",
+    "url": "^0.11.0",
     "validator": "^10.11.0"
   },
   "devDependencies": {

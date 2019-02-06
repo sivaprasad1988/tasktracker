@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require("passport");
 const users = require("./routes/api/users");
 const trello = require("./routes/api/trello");
+const timer = require("./routes/api/routes");
 const app = express();
 app.use(
     bodyParser.urlencoded({
@@ -20,6 +21,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/trello", trello);
+app.use('/', timer);
 
 const port = process.env.PORT || 1000; // process.env.port is Heroku's port if you choose to deploy the app there
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

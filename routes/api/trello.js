@@ -4,7 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
-var OAuth = require('oauth').OAuth
+const OAuth = require('oauth').OAuth;
+var Trello = require("trello");
 
 
 // Load input validation
@@ -17,7 +18,7 @@ const User = require("../../models/User");
 // @route POST api/users/register
 // @desc Register user
 // @access Public
-router.post("/getCardDetails", (req, res) => {
+router.post("/getCardDetails", async (req, res) => {
     const doc = {
         username: req.body.username,
         password: req.body.pwd,
@@ -29,19 +30,44 @@ router.post("/getCardDetails", (req, res) => {
 
     const key = req.body.email;
     const secret = req.body.password;
+    const userid = req.body.userid;
 
     const loginCallback = `http://localhost:3000/callback`;
     const oauth_secrets = {};
-    const oauth = new OAuth(requestURL, accessURL, key, secret, "1.0A", loginCallback, "HMAC-SHA1");
+    const oauth = await  new OAuth(requestURL, accessURL, key, secret, "1.0A", loginCallback, "HMAC-SHA1");
 
-    oauth.getOAuthRequestToken(function(error, token, tokenSecret, results){
-        if( error ){
-            let errors = {}; 
-            return res.status(400).json({ notoken: 'OAuth consumer did not supply its key'});
-        }else{
-            oauth_secrets[token] = tokenSecret;
-             res.json({url:`${authorizeURL}?oauth_token=${token}&name=${appName}`});
+    oauth.getOAuthRequestToken(function (error, token, tokenSecret, results) {
+        if (error) {
+            let errors = {};
+            return res.status(400).json({notoken: 'OAuth consumer did not supply its key'});
+        } else {
+
+            User.findOneAndUpdate({_id: userid}, {tokenSecret: tokenSecret,}).then((updatedDoc) => {
+                console.log("RESULT: " + updatedDoc);
+                res.json({url: `${authorizeURL}?oauth_token=${token}&name=${appName}`});
+            }).catch((err) => {
+                res.send(err)
+            });
+
         }
+    });
+
+});
+
+// @route POST api/users/register
+// @desc Register user
+// @access Public
+router.post("/getAccessTokens", async (req, res) => {
+
+    const key = '51747a648c4cfeed9994aa2bd019abff';
+    const secret = '31e3b863f771241e95eb7c3554de9c5e5e9708ff45b8e940a6f51e82efa6bac9';
+    const myListId = '5be944b3c6db6a8cec28e0e5';
+
+
+    const trello = new Trello(key, secret);
+    const cardsPromise = trello.getCardsOnList(myListId);
+    cardsPromise.then((cards) => {
+        res.json({data: cards});
     });
 
 });
@@ -52,7 +78,7 @@ router.post("/getCardDetails", (req, res) => {
 router.post("/login", (req, res) => {
     // Form validation
 
-    const { errors, isValid } = validateLoginInput(req.body);
+    const {errors, isValid} = validateLoginInput(req.body);
 
     // Check validation
     if (!isValid) {
@@ -63,10 +89,10 @@ router.post("/login", (req, res) => {
     const password = req.body.password;
 
     // Find user by email
-    User.findOne({ email }).then(user => {
+    User.findOne({email}).then(user => {
         // Check if user exists
         if (!user) {
-            return res.status(404).json({ emailnotfound: "Email not found" });
+            return res.status(404).json({emailnotfound: "Email not found"});
         }
 
         // Check password
@@ -96,7 +122,7 @@ router.post("/login", (req, res) => {
             } else {
                 return res
                     .status(400)
-                    .json({ passwordincorrect: "Password incorrect" });
+                    .json({passwordincorrect: "Password incorrect"});
             }
         });
     });

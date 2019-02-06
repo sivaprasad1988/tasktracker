@@ -70,16 +70,40 @@ export const logoutUser = () => dispatch => {
 
 
 // Login - get user token
-export const trelloAppLogin = userData => dispatch => {
-    axios
-        .post("api/trello/getCardDetails", userData)
-        .then(res => {
-            alert(res.data.url);
+export const trelloAppLogin =  userData => dispatch => {
+    const token = localStorage.getItem("jwtToken");
+    const decoded = jwt_decode(token);
+    userData.userid = decoded.id;
+
+    axios.post("api/trello/getCardDetails", userData).then(res => {
             const {url} = res.data.url;
-            alert(res.data.url);
             dispatch(redirectUserToTrello(res.data.url));
-            alert(url);
         }).catch(err => {
+            if (err.response) {
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: (err.response.data) ? err.response.data : ''
+                })
+            }
+        }
+    );
+};
+
+
+export const trelloAppLoginCallback = (queryString) => dispatch => {
+    const token = localStorage.getItem("jwtToken");
+    const decoded = jwt_decode(token);
+    const userData = {};
+    userData.userid = decoded.id;
+    userData.oauth_token = queryString.oauth_token;
+    userData.oauth_verifier = queryString.oauth_verifier;
+
+
+    axios.post("api/trello/getAccessTokens", userData).then(res => {
+        const {url} = res.data.url;
+
+        //dispatch(redirectUserToTrello(res.data.url));
+    }).catch(err => {
             if (err.response) {
                 dispatch({
                     type: GET_ERRORS,

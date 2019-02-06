@@ -15,6 +15,9 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    tokenSecret: {
+        type: String
+    },
     date: {
         type: Date,
         default: Date.now
