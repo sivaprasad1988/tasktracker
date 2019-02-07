@@ -14,7 +14,6 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
-  alert(action.type)
   switch (action.type) {
     case GET_ERRORS:
       return action.payload;
