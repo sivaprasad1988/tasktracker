@@ -48,3 +48,14 @@ export const getDataForTimerDashBoard = (timerData) => dispatch => {
         }
     });
 };
+
+
+export const getUserTimeSheet = () => dispatch => {
+    axios.get('/getAll').then(function (response) {
+        console.log(response.data)
+            dispatch({
+                type: LOAD_TIMER_DATA,
+                payload: response.data,
+            })
+    });
+};

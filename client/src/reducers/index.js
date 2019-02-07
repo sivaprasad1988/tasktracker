@@ -7,5 +7,5 @@ import timerReducer from "./timerReducer";
 export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
-  timer: timerReducer
+  timers: timerReducer
 });

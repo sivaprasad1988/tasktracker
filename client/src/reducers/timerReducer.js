@@ -3,18 +3,6 @@ import uuid from 'uuid';
 const isEmpty = require("is-empty");
 
 const initialState = {
-    isAuthenticated: false,
-    user: {},
-    loading: false,
-    timers: [{
-            title: '',
-            description: '',
-            elapsed: null,
-            runningSince: null,
-            id: uuid.v4(),
-            updateDate: new Date().toISOString()
-        }
-    ]
 };
 
 export default function (state = initialState, action) {
@@ -24,9 +12,7 @@ export default function (state = initialState, action) {
             console.log(action);
             return {
                 ...state,
-                isAuthenticated: !isEmpty(action.payload),
-                user: action.payload,
-                timers: action.timer
+                timers: action.payload,
             };
         default:
             return state;
