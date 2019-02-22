@@ -13,7 +13,6 @@ import { newTimer } from './helpers'
 import { updateAll, createUrlWithParams, updateTrackOnStartOrStop } from './services';
 import Filters from './Filters';
 import {connect} from "react-redux";
-import {trelloAppLoginCallback} from "../actions/authActions";
 import {getDataForTimerDashBoard} from '../actions/timerAction';
 
 var querystring = require('querystring');
@@ -102,6 +101,7 @@ class TimerDashboard extends React.Component {
   }
 
   startTimer (timerId) {
+    alert(timerId)
     const now = Date.now()
     let timers = this.state.timers.map(timer => {
       if (timer.id === timerId) {
@@ -187,6 +187,8 @@ class TimerDashboard extends React.Component {
 
   render () {
     const onQueryChange = _.debounce((query)=>{this.onQueryChange(query)}, 400);
+    console.log(timerId);
+
     return (
       <div className="container">
           <div className="row">

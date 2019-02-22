@@ -31,7 +31,11 @@ class EossEditableTimerList extends React.Component {
         <div className="ui five cards">
             { timerInfo.map(timer => 
             <EditableTimer key={timer._id}
-            {...timer} />      
+            {...timer}
+             onFormSubmit={this.props.onFormSubmit}
+             onTrashClick={this.props.onTrashClick}
+             onStartClick={this.props.onStartClick}
+             onStopClick={this.props.onStopClick}/>
               )}
         </div>
     ) : '';

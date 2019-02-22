@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import uuid from 'uuid';
 
 import {GET_ERRORS, LOAD_TIMER_DATA} from "./types";
 
@@ -40,10 +41,23 @@ export const getDataForTimerDashBoard = (timerData) => dispatch => {
             });
         } else {
             console.log(response.data)
+
+            let savedTimers = [];
+            response.data.forEach((timer)=>{
+                console.log(timer)
+                savedTimers.push({
+                    title: timer.title,
+                    description: timer.description,
+                    id: timer._id || timer.id || uuid.v4(),
+                    elapsed: timer.elapsed || 0,
+                    runningSince: timer.runningSince || null,
+                    updateDate: timer.updateDate || new Date().toISOString()
+                });
+            });
             dispatch({
                 type: LOAD_TIMER_DATA,
                 payload: decoded,
-                timers: response.data
+                timers: savedTimers
             })
         }
     });

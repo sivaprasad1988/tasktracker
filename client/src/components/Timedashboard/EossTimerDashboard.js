@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getUserTimeSheet} from "../../actions/timerAction";
 import EossEditableTimerList from './EossEditableTimerList'
+import {updateTrackOnStartOrStop} from "../services";
 
 
 class EossTimerDashboard extends Component {
@@ -12,14 +13,43 @@ class EossTimerDashboard extends Component {
     componentDidMount(){
         this.props.getUserTimeSheet();
     }
+    startTimer (timerId) {
+        const now = Date.now()
+        alert(timerId);
+        console.log(this.props)
+        let timers = this.state.timers.map(timer => {
+            if (timer.id === timerId) {
+                return Object.assign({}, timer, {
+                    runningSince: now,
+                    updateDate: new Date().toISOString()
+                })
+            } else {
+                return timer
+            }
+        });
+        let timerToUpdate = null;
+        timers.forEach(timer => {
+            if(timer.id === timerId) {
+                timerToUpdate = timer;
+            }
+        });
+        if(timerToUpdate) updateTrackOnStartOrStop(timerToUpdate);
+        this.setState({
+            timers
+        })
+    }
+
     render() {
         const {user} = this.props.auth;
         const timerInfo = this.props.timers.timers;
-        console.log(timerInfo);
+
 
         return (
             <div>
-                <EossEditableTimerList timerInfo={timerInfo} />
+                <EossEditableTimerList
+                    timerInfo={timerInfo}
+                    onStartClick={timerId => this.startTimer(timerId)}
+                />
             </div>
         )
     }
