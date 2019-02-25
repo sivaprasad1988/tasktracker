@@ -187,7 +187,7 @@ class TimerDashboard extends React.Component {
 
   render () {
     const onQueryChange = _.debounce((query)=>{this.onQueryChange(query)}, 400);
-    console.log(timerId);
+    //console.log(timerId);
 
     return (
       <div className="container">

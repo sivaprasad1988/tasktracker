@@ -59,7 +59,7 @@ class EditableTimer extends React.Component {
     } else {
       return (
         <Timer
-          id={this.props.id}
+          id={this.props._id}
           title={this.props.title}
           description={this.props.description}
           elapsed={this.props.elapsed}

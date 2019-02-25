@@ -9,12 +9,10 @@ var querystring = require('querystring');
 
 // Register User
 export const getDataForTimerDashBoard = (timerData) => dispatch => {
-    console.log("FUCKING HERE")
     const token = localStorage.getItem("jwtToken");
     const decoded = jwt_decode(token);
     //If no data remains in db, put the two dummy data of state into the db
     axios.get('/getAll').then(function (response) {
-        console.log("FUCKING HERE INSIDE AXIOS")
         let savedTimers = [];
         if (response.data.length === 0) {
             timerData.timers.forEach((timer) => {
@@ -73,3 +71,5 @@ export const getUserTimeSheet = () => dispatch => {
             })
     });
 };
+
+

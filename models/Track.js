@@ -7,4 +7,9 @@ var trackSchema = new Schema({
   runningSince: Number,
   updateDate: String
 });
+trackSchema.set('toJSON', {
+  virtuals: true,
+  versionKey:false,
+  transform: function (doc, ret) {    }
+});
 module.exports = mongoose.model('Track', trackSchema);

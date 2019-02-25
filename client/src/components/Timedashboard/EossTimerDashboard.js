@@ -13,12 +13,37 @@ class EossTimerDashboard extends Component {
     componentDidMount(){
         this.props.getUserTimeSheet();
     }
+
+    stopTimer (timerId) {
+        const now = Date.now();
+        let timers = this.props.timers.timers.map(timer => {
+        if (timer._id === timerId) {
+        const lastElapsed = now-timer.runningSince
+        return Object.assign({}, timer, {
+          elapsed: timer.elapsed + lastElapsed,
+          runningSince: null,
+          updateDate: new Date().toISOString()
+        })
+      } else {
+        return timer
+      }
+    });
+    let timerToUpdate = null;
+    timers.forEach(timer => {
+      if(timer._id === timerId) {
+        timerToUpdate = timer;
+      }
+    });
+    if(timerToUpdate) updateTrackOnStartOrStop(timerToUpdate);
+        this.setState({
+          timers
+        });
+    }
     startTimer (timerId) {
         const now = Date.now()
-        alert(timerId);
-        console.log(this.props)
-        let timers = this.state.timers.map(timer => {
-            if (timer.id === timerId) {
+        let timers = this.props.timers.timers.map(timer => {
+            if (timer._id === timerId) {
+                alert(timer._id);
                 return Object.assign({}, timer, {
                     runningSince: now,
                     updateDate: new Date().toISOString()
@@ -28,12 +53,16 @@ class EossTimerDashboard extends Component {
             }
         });
         let timerToUpdate = null;
+        console.log(timers);
+
         timers.forEach(timer => {
-            if(timer.id === timerId) {
+            if(timer._id === timerId) {
                 timerToUpdate = timer;
             }
         });
-        if(timerToUpdate) updateTrackOnStartOrStop(timerToUpdate);
+        if(timerToUpdate){
+            updateTrackOnStartOrStop(timerToUpdate);
+        }
         this.setState({
             timers
         })
@@ -49,6 +78,7 @@ class EossTimerDashboard extends Component {
                 <EossEditableTimerList
                     timerInfo={timerInfo}
                     onStartClick={timerId => this.startTimer(timerId)}
+                    onStopClick={timerId => this.stopTimer(timerId)}
                 />
             </div>
         )
